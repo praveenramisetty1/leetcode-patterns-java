@@ -25,6 +25,7 @@ replay_pid*
 
 # Maven
 target/
+node_modules/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -103,3 +104,8 @@ $RECYCLE.BIN/
 *.bak
 *.swp
 *~.nib
+
+# SSL Certificates (for local HTTPS development)
+*.pem
+key.pem
+cert.pem

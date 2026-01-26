@@ -1,11 +1,15 @@
 const express = require('express');
+const https = require('https');
+const http = require('http');
 const { exec } = require('child_process');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs').promises;
+const fsSync = require('fs');
 
 const app = express();
 const PORT = 3000;
+const HTTPS_PORT = 3443;
 
 // Middleware
 app.use(cors());
@@ -91,10 +95,34 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+// Load SSL certificates
+let httpsServer;
+try {
+    const privateKey = fsSync.readFileSync(path.join(__dirname, 'key.pem'), 'utf8');
+    const certificate = fsSync.readFileSync(path.join(__dirname, 'cert.pem'), 'utf8');
+    const credentials = { key: privateKey, cert: certificate };
+
+    // Create HTTPS server
+    httpsServer = https.createServer(credentials, app);
+    httpsServer.listen(HTTPS_PORT, () => {
+        console.log(`🔒 HTTPS Server running at https://localhost:${HTTPS_PORT}`);
+    });
+} catch (error) {
+    console.warn('⚠️  HTTPS certificates not found. HTTPS server not started.');
+    console.warn('   Run: openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"');
+}
+
+// Create HTTP server (for backward compatibility)
+const httpServer = http.createServer(app);
+httpServer.listen(PORT, () => {
+    console.log(`🚀 HTTP Server running at http://localhost:${PORT}`);
     console.log(`📂 Serving files from: ${__dirname}`);
-    console.log(`\n✨ Open http://localhost:${PORT} in your browser to execute Java code\n`);
+    if (httpsServer) {
+        console.log(`\n✨ Open https://localhost:${HTTPS_PORT} in your browser to execute Java code (HTTPS)`);
+        console.log(`   Or http://localhost:${PORT} for HTTP\n`);
+    } else {
+        console.log(`\n✨ Open http://localhost:${PORT} in your browser to execute Java code\n`);
+    }
 });
 
 // Made with Bob
