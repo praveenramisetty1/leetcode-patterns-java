@@ -102,13 +102,53 @@ A comprehensive collection of common LeetCode problem-solving patterns implement
 - Longest Common Subsequence
 - Coin Change
 
-## � Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - Java 17 or Java 21
 - Maven 3.8+
+- Node.js 16+ (for web interface)
+- npm (comes with Node.js)
 
-### Build and Run
+### Quick Start - Web Interface (Recommended)
+
+#### Option 1: Using Scripts (Easiest)
+```bash
+# Make scripts executable (first time only)
+chmod +x start-server.sh stop-server.sh
+
+# Start the server
+./start-server.sh
+
+# Stop the server (in another terminal)
+./stop-server.sh
+```
+
+#### Option 2: Manual Setup
+```bash
+# 1. Install Node.js dependencies
+npm install
+
+# 2. Compile Java code
+mvn clean compile
+
+# 3. Start the server
+npm start
+```
+
+#### Access the Application
+Open your browser to:
+- **HTTP**: http://localhost:3000
+- **HTTPS**: https://localhost:3443 (requires SSL certificates)
+
+#### Using the Web Interface
+1. Select a pattern from the dropdown (e.g., "Two Sum II")
+2. View the problem description and visual explanation
+3. Click "🚀 Execute Java Code"
+4. See the output in the terminal below
+
+### Alternative: Command Line Execution
+
 ```bash
 # Build the project
 mvn clean install
@@ -118,6 +158,52 @@ mvn test
 
 # Run a specific pattern example
 mvn exec:java -Dexec.mainClass="com.leetcode.patterns.twopointers.TwoSumII"
+
+# Or use java directly
+java -cp target/classes com.leetcode.patterns.twopointers.TwoSumII
+```
+
+### Development Mode
+```bash
+# Auto-restart server on file changes
+npm run dev
+```
+
+### Troubleshooting
+
+#### Port Already in Use
+```bash
+# Use the stop script
+./stop-server.sh
+
+# Or manually check and kill processes
+lsof -i :3000 -i :3443 | grep LISTEN
+kill <PID>
+```
+
+#### Java Compilation Errors
+```bash
+# Check Java version (needs 17+)
+java -version
+
+# Clean and rebuild
+mvn clean compile -X
+```
+
+#### Missing Dependencies
+```bash
+# Reinstall Node.js dependencies
+rm -rf node_modules package-lock.json
+npm install
+
+# Rebuild Java
+mvn clean install
+```
+
+### Optional: SSL Certificates for HTTPS
+```bash
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes \
+  -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"
 ```
 
 ## 📁 Project Structure

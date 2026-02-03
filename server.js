@@ -52,7 +52,7 @@ app.post('/execute', (req, res) => {
     }
 
     // Build the Java command using classpath
-    const command = `cd /Users/praveenramisetty/Desktop/leetcode-patterns-java && java -cp target/classes ${className}`;
+    const command = `cd ${__dirname} && java -cp target/classes ${className}`;
 
     console.log(`Executing: ${command}`);
 
